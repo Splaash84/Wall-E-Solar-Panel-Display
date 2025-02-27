@@ -1,11 +1,12 @@
 # Wall-E-Solar-Panel-Display
 Solar Panel Display for 1-1 Scale Wall-E
+
 [Thank you Dan Coe For Orignal Code] 
+
 @file    Solar Charge Screen
  * @brief   Firmware for the WALL-E LCD Screen & Battery Monitor.
  * @version 1.1
- *
- * @details This firmware monitors battery voltage, displays it on an LCD screen,
+ * * @details This firmware monitors battery voltage, displays it on an LCD screen,
  *          provides audio feedback, and allows for calibration. It uses an
  *          RA8875 display, DFPlayer Mini for audio, NeoPixels for visual alerts,
  *          and EEPROM for persistent storage.
