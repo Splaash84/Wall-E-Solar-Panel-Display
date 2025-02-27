@@ -1,5 +1,6 @@
 # Wall-E-Solar-Panel-Display
 Solar Panel Display for 1-1 Scale Wall-E
+[Thank you Dan Coe For Orignal Code] 
 @file    Solar Charge Screen
  * @brief   Firmware for the WALL-E LCD Screen & Battery Monitor.
  * @version 1.1
@@ -30,6 +31,6 @@ Solar Panel Display for 1-1 Scale Wall-E
  *  - I/O: Configured Light button in loop() to trigger screen clear rather than reset.
  *  - UI: Streamlined boot sequence timing.
  *
- * Version 1.0 - [Thank you Dan Coe For Orignal Code]   
+ * Version 1.0 - [Orignal Code by Dan Coe]   
  *  - Functionality for battery voltage monitoring and LCD display.
  *  - Button control for sound playback.
