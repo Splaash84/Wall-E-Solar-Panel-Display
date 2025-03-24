@@ -423,7 +423,7 @@ void setup() {
   Serial.begin(9600);   // Debug Console
   mySoftwareSerial.begin(9600); // Initialize software serial for DFPlayer
 
-  // Initialize DFPlayer Mini using software serial instead of hardware serial
+  // Initialize DFPlayer Mini using software serial
   if (!myDFPlayer.begin(mySoftwareSerial)) {
     Serial.println("DFPlayer Mini not found.");
     while (true); // Stay here if DFPlayer Mini is not found
