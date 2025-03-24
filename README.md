@@ -5,7 +5,7 @@ Solar Panel Display for 1-1 Scale Wall-E
 
 @file    Solar Charge Screen
  * @brief   Firmware for the WALL-E LCD Screen & Battery Monitor.
- * @version 1.1
+ * @version 2.1
  * * @details This firmware monitors battery voltage, displays it on an LCD screen,
  *          provides audio feedback, and allows for calibration. It uses an
  *          RA8875 display, DFPlayer Mini for audio, NeoPixels for visual alerts,
@@ -16,7 +16,7 @@ Solar Panel Display for 1-1 Scale Wall-E
  *
  * Revision History:
  *
- * Version 1.1 - [Current Version]
+ * Version 2.1 - [Current Version]
  *  - Feature: Implemented EEPROM integration for persistent storage of calibration settings, ensuring settings are retained across power cycles.
  *  - Enhancement: Added RA8875_ORANGE color definition for improved UI aesthetics within calibration menus.
  *  - Enhancement: Introduced 'isAudio4Playing' flag to manage low-battery audio looping, preventing audio interruption and improving user experience.
