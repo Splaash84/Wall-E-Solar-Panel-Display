@@ -227,7 +227,7 @@ void calibrationMenu() {
         tft.textWrite("Stop: Voltage Thresholds");
 
         tft.textSetCursor(360, 30);
-        tft.textWrite("Light: Exit"); // Changed from Record to Light
+        tft.textWrite("Light: Exit"); 
 
         while (isCalibrating && !inSubMenu) {
             if (digitalRead(PLAY_BUTTON) == LOW) {
@@ -243,7 +243,7 @@ void calibrationMenu() {
                 delay(500);
                 calibrationMenu();
             }
-            if (digitalRead(LIGHT_BUTTON) == LOW) { // Changed from Recordbutton to Lightbutton
+            if (digitalRead(LIGHT_BUTTON) == LOW) { 
                 isCalibrating = false;
                 delay(500);
                 tft.fillScreen(RA8875_BLACK);
