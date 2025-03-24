@@ -75,6 +75,7 @@
 #define DFPLAYER_RX 2  // Connect to TX of DFPlayer
 #define DFPLAYER_TX 15 // Connect to RX of DFPlayer
 
+#define BUFFER_VOLTAGE 0.1 //Buffer For Yellow Box Flash
 //--------------------------------------------------------------------
 //                       Global Variables
 //--------------------------------------------------------------------
@@ -138,6 +139,11 @@ bool stopButtonPressedOnce = false;
 bool holdingStopButton = false;
 bool isCalibrating = false;
 bool inSubMenu = false;
+
+// Add these global variables at the top with other globals
+unsigned long lastAudioStartTime = 0;
+const unsigned long AUDIO_DURATION = 250;  // Duration of audio file in ms
+const unsigned long AUDIO_DELAY = 0;     // Delay between audio plays in ms
 
 //--------------------------------------------------------------------
 //                       Objects
@@ -416,8 +422,7 @@ void updateVoltageDisplay() {
 void setup() {
   Serial.begin(9600);   // Debug Console
   mySoftwareSerial.begin(9600); // Initialize software serial for DFPlayer
-Serial.println("Solar Charge Display V2 ");
-Serial.println("By: John Geb ");
+
   // Initialize DFPlayer Mini using software serial instead of hardware serial
   if (!myDFPlayer.begin(mySoftwareSerial)) {
     Serial.println("DFPlayer Mini not found.");
@@ -533,76 +538,50 @@ void loop() {
     }
 
     // Check Battery Critical Level and Set Alert
-    if (vIN1 >= voltageThresholds[0]) {
+   if (vIN1 >= voltageThresholds[0] + BUFFER_VOLTAGE) {
         // Battery voltage is above threshold -> Yellow box (No blinking)
         tft.fillRoundRect(start_x + 483, 0, 71, 294, round_corner, RA8875_YELLOW);
         
         // Stop audio 4 if it was playing
         if (isAudio4Playing) {
-            myDFPlayer.stop();  // Stops track 4 only
-            isAudio4Playing = false;  // Update flag
+            myDFPlayer.stop();  
+            isAudio4Playing = false;
+            lastAudioStartTime = 0;
         }
-    } else {
+    } else if (vIN1 <= voltageThresholds[0] - BUFFER_VOLTAGE) {
         // Below threshold -> Red blinking box & play audio 4
-        if (millis() > 5000) {  
-            if ((millis() / 250) % 2 == 0) {  
-                tft.fillRoundRect(start_x + 483, 0, 71, 294, round_corner, RA8875_RED);
-                
-                if (!isAudio4Playing) {  // If track 4 is not already playing, play it
-                    myDFPlayer.loop(4);  
-                    isAudio4Playing = true;
-                }
-            } else {
-                tft.fillRoundRect(start_x + 483, 0, 71, 294, round_corner, RA8875_BLACK);
+        unsigned long currentTime = millis();
+        
+        // Handle visual blinking
+        if ((currentTime / 250) % 2 == 0) {
+            tft.fillRoundRect(start_x + 483, 0, 71, 294, round_corner, RA8875_RED);
+            
+            // Handle audio playback
+            if (!isAudio4Playing && (currentTime - lastAudioStartTime >= AUDIO_DURATION + AUDIO_DELAY)) {
+                myDFPlayer.stop();  // Stop any previous playback
+                delay(50);  // Short delay for DFPlayer to process
+                myDFPlayer.play(4);
+                isAudio4Playing = true;
+                lastAudioStartTime = currentTime;
+                Serial.println("Playing Audio 4");
             }
+        } else {
+            tft.fillRoundRect(start_x + 483, 0, 71, 294, round_corner, RA8875_BLACK);
+        }
+        
+        // Check if audio should be marked as finished
+        if (isAudio4Playing && (currentTime - lastAudioStartTime >= AUDIO_DURATION)) {
+            isAudio4Playing = false;
         }
     }
 
 // Update Battery Level Indicators based on Thresholds
-if(vIN1 >= voltageThresholds[1]){
-    tft.fillRoundRect(start_x + 438, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 438, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[2]){
-    tft.fillRoundRect(start_x + 393, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 393, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[3]){
-    tft.fillRoundRect(start_x + 348, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 348, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[4]){
-    tft.fillRoundRect(start_x + 303, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 303, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[5]){
-    tft.fillRoundRect(start_x + 258, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 258, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[6]){
-    tft.fillRoundRect(start_x + 213, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 213, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[7]){
-    tft.fillRoundRect(start_x + 168, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 168, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[8]){
-    tft.fillRoundRect(start_x + 123, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 123, 0, 20, 294, round_corner, RA8875_BLACK);
-}
-if(vIN1 >= voltageThresholds[9]){
-    tft.fillRoundRect(start_x + 78, 0, 20, 294, round_corner, RA8875_YELLOW);
-} else {
-    tft.fillRoundRect(start_x + 78, 0, 20, 294, round_corner, RA8875_BLACK);
+for (int i = 1; i < NUM_VOLTAGE_THRESHOLDS; i++) {
+    if (vIN1 >= voltageThresholds[i] + BUFFER_VOLTAGE) {
+        tft.fillRoundRect(start_x + (483 - (i * 45)), 0, 20, 294, round_corner, RA8875_YELLOW);
+    } else if (vIN1 <= voltageThresholds[i] - BUFFER_VOLTAGE) {
+        tft.fillRoundRect(start_x + (483 - (i * 45)), 0, 20, 294, round_corner, RA8875_BLACK);
+    }
 }
 
  Serial.println(vIN1);
@@ -664,13 +643,13 @@ if(vIN1 >= voltageThresholds[9]){
         delay(500);
     }
 
-    
-    if (digitalRead(LIGHT_BUTTON) == LOW && (currentMillis - lastPressTimeLightbutton) >= DEBOUNCE_DELAY) {
-    Serial.println("Resetting Arduino...");
-    delay(100);  // Brief delay to allow serial message to send
-    wdt_enable(WDTO_15MS);  // Enable watchdog timer with 15ms timeout
-    while(1);  // Wait for watchdog to reset the Arduino
+     if (digitalRead(LIGHT_BUTTON) == LOW && (currentMillis - lastPressTimeLightbutton) >= DEBOUNCE_DELAY) {
+        Serial.println("Resetting Arduino");
+        wdt_enable(WDTO_15MS);  // Enable the watchdog timer with a short timeout (15ms)
+        while (true) {}  // The program will hang here until the reset occurs
+        lastPressTimeLightbutton = currentMillis;
     }
+
 
 }   //=================End Loop========================
 
