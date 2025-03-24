@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include "Adafruit_GFX.h"
 #include "Adafruit_RA8875.h"
-#include "bmp.h"               // Image file
+#include "bmp.h"               
 #include <DFRobotDFPlayerMini.h>
 #include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
