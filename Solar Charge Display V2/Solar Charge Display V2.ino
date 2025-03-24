@@ -140,10 +140,10 @@ bool holdingStopButton = false;
 bool isCalibrating = false;
 bool inSubMenu = false;
 
-// Add these global variables at the top with other globals
+// Audio Duration and Delay
 unsigned long lastAudioStartTime = 0;
-const unsigned long AUDIO_DURATION = 250;  // Duration of audio file in ms
-const unsigned long AUDIO_DELAY = 0;     // Delay between audio plays in ms
+const unsigned long AUDIO_DURATION = 250;  
+const unsigned long AUDIO_DELAY = 0;     
 
 //--------------------------------------------------------------------
 //                       Objects
