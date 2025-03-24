@@ -14,7 +14,7 @@
 /**
  * @file    Solar Charge Screen
  * @brief   Firmware for the WALL-E LCD Screen & Battery Monitor.
- * @version 1.1
+ * @version 2.1
  *
  * @details This firmware monitors battery voltage, displays it on an LCD screen,
  *          provides audio feedback, and allows for calibration. It uses an
