@@ -453,7 +453,7 @@ void setup() {
         EEPROM.get(VOLTAGE_THRESHOLDS_ADDRESS + (i * sizeof(float)), voltageThresholds[i]);
 
         // Check if the stored value is NaN or out of realistic range
-        if (isnan(voltageThresholds[i]) || voltageThresholds[i] < 10.0 || voltageThresholds[i] > 20.0) {
+        if (isnan(voltageThresholds[i]) || voltageThresholds[i] < 10.0 || voltageThresholds[i] > 26.0) {
             eepromUninitialized = true;
             voltageThresholds[i] = 12.48 + (i * 0.48); // Set default values dynamically
         }
@@ -679,3 +679,4 @@ void boot_sequence() {
     delay(150);
     tft.fillRoundRect(start_x + 78, 0, 20, 294, round_corner, RA8875_YELLOW);   // Index 9
 }
+
